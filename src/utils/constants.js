@@ -9,6 +9,7 @@ const CATEGORIES = [
     { name: "AMWAY", color: "volcano"},
     { name: "MOBILE-RECHARGE", color: "green"},
     { name: "INTERNET", color: "red"},
+    { name: "RESTAURANT", color: "gold"},
     { name: "ELECTRONIC", color: "volcano"},
     { name: "PETROL", color: "gold"},
     { name: "GAS", color: "orange"},
