@@ -12,8 +12,10 @@ const CATEGORIES = [
     { name: "RESTAURANT", color: "gold"},
     { name: "ELECTRONIC", color: "volcano"},
     { name: "PETROL", color: "gold"},
+    { name: "TRAVEL", color: "pink"},
     { name: "GAS", color: "orange"},
     { name: "D-MART", color: "geekblue"},
+    { name: "SHORTAGE", color: "red"},
 ]
 
 const AMOUNT = [
