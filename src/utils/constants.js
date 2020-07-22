@@ -15,6 +15,9 @@ const CATEGORIES = [
     { name: "TRAVEL", color: "pink"},
     { name: "GAS", color: "orange"},
     { name: "D-MART", color: "geekblue"},
+    { name: "CLOTHES", color: "gold"},
+    { name: "PROFESSIONAL", color: "volcano"},
+    { name: "MISCELLANEOUS", color: "orange"},
     { name: "SHORTAGE", color: "red"},
 ]
 
