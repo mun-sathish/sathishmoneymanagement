@@ -30,7 +30,7 @@ interface IProps extends RouteComponentProps {}
 interface IState {
     currentTableViewTotalAmt: number;
     dateFilterDropdownVisible: boolean;
-    width: number;
+    windowWidth: number;
     tableData: Array<IGetTransactionResponse>;
     tableProps: {
         footer(): JSX.Element;
@@ -59,7 +59,7 @@ const pagination: false | TablePaginationConfig = { position: ["bottomRight"] };
 export default class Transaction extends React.Component<IProps, IState> {
     state: IState = {
         currentTableViewTotalAmt: 0,
-        width: 0,
+        windowWidth: Number.MAX_VALUE,
         dateFilterDropdownVisible: false,
         tableData: [],
         tableProps: {
@@ -140,26 +140,21 @@ export default class Transaction extends React.Component<IProps, IState> {
         this.setState({ currentTableViewTotalAmt: totalAmount });
     };
 
-    getWindowWidth = (): number => {
-        return Math.max(
-            document.documentElement.clientWidth,
-            window.innerWidth || 0
-        );
-    };
-
     onResize = (): void => {
-        this.setState({
-            width: this.getWindowWidth(),
-        });
+        this.setState({ windowWidth: 0 });
+        let windowWidth: number =
+            typeof window !== "undefined"
+                ? window.innerWidth
+                : Number.MAX_VALUE;
+        this.setState({ windowWidth });
     };
 
     componentWillMount() {
         this.fetchTransaction();
-        this.setState({
-            width: this.getWindowWidth(),
-        });
     }
+
     componentDidMount() {
+        this.onResize();
         window.addEventListener("resize", this.onResize);
     }
     componentWillUnmount() {
@@ -365,7 +360,7 @@ export default class Transaction extends React.Component<IProps, IState> {
 
         return (
             <div>
-                {this.state.width < 480 ? (
+                {this.state.windowWidth <= 480 ? (
                     <Empty
                         image={
                             "https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
