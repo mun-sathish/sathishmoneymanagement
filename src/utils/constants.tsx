@@ -142,7 +142,7 @@ export const mdColors = [
   "#263238",
 ];
 
-export const generateRandomNumber = (min: number, max: number) => {
+export const generateRandomNumber = (min: number = 0, max: number = 122) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
 
