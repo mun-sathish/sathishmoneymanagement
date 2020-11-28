@@ -5,12 +5,23 @@ import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { LOCATION } from "./utils/constants";
 ReactDOM.render(
-    <React.StrictMode>
-        <Router>
-            <Route path={LOCATION.EXPENSE} component={App} />
-        </Router>
-    </React.StrictMode>,
-    document.getElementById("root")
+  <React.StrictMode>
+    {/* <>
+      {mdColors.map((color) => {
+        return (
+          <div
+            style={{ maxWidth: "100px", maxHeight: "100px", background: color }}
+          >
+            {color}
+          </div>
+        );
+      })}
+    </> */}
+    <Router>
+      <Route path={LOCATION.EXPENSE} component={App} />
+    </Router>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
