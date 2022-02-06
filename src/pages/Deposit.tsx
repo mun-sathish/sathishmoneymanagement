@@ -38,7 +38,6 @@ export default class Deposit extends React.Component<IProps, IState> {
     fetchWallet = (): void => {
         fetchWallet()
             .then((response: AxiosResponse<IGetWalletResponse>) => {
-                console.log(response.data);
                 this.setState({ walletLoading: false, wallet: response.data });
             })
             .catch((err: AxiosError<any>) => {
@@ -53,7 +52,6 @@ export default class Deposit extends React.Component<IProps, IState> {
     }
 
     handleSubmit = (values: Store): void => {
-        console.log(values);
         this.setState({ postingData: true });
         postDeposit(values as IPostDepositFnInput)
             .then((response: AxiosResponse<IPostTransactionResponse>) => {

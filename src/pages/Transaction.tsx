@@ -60,7 +60,7 @@ const expandable: ExpandableConfig<IGetTransactionResponse> = {
   expandedRowRender: (record) => (
     <p>
       {record.comments && record.comments !== "undefined"
-        ? record.comments
+        ? <pre>{record.comments}</pre>
         : "No Comments Provided"}
     </p>
   ),
@@ -268,14 +268,14 @@ export default class Transaction extends React.Component<IProps, IState> {
           value: item.name,
         })),
         onFilter: (value, record) =>
-          record.category.indexOf(value as string) === 0,
+          record.category?.indexOf((value || "") as string) === 0,
         sorter: (a, b) => a.category.localeCompare(b.category),
         render: (text, record, index) => {
           let category = Constants.CATEGORIES.filter((i) => i.name === text)[0];
           return category ? (
             <Tag color={category.color}>{category.name}</Tag>
           ) : (
-            <div>{text.name}</div>
+            <div>{text?.name}</div>
           );
         },
       },

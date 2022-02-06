@@ -22,6 +22,7 @@ interface IPostTransactionRequest {
     wallet_id: number;
     created: number;
     created_by: number;
+    created_by_name: string;
     deposited_by?: number;
 }
 

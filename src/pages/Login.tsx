@@ -3,7 +3,7 @@ import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import Axios, { AxiosResponse, AxiosError } from "axios";
 import { URLS, LOCATION } from "../utils/constants";
-import SHA256 from "../utils/hashing";
+// import SHA256 from "../utils/hashing";
 import { RouteComponentProps } from "react-router-dom";
 import { Store } from "antd/lib/form/interface";
 import { ILoginAPIResponse } from "../types/interfaces/api-response";
@@ -12,24 +12,23 @@ interface IProps extends RouteComponentProps {}
 interface IState {
     loading: boolean;
     invalidCreds: boolean;
+    serverDown: boolean;
 }
 
 export default class Login extends React.Component<IProps, IState> {
     state: IState = {
         loading: false,
         invalidCreds: false,
+        serverDown: false,
     };
 
     onFinish = (formValues: Store) => {
-        let values = formValues as { username: string; password: string };
+        let values = formValues as { username: string; password: string, user_name: string };
         this.setState({ invalidCreds: false, loading: true });
-        console.log("Received values of form: ", values);
-        let queryPararm = `?user_name=${values.username}&password=${SHA256(
-            values.password
-        )}`;
-        Axios.get(URLS.LOGIN + queryPararm)
+        values["user_name"] = values.username;
+        Axios.post(URLS.LOGIN, values)
             .then((response: AxiosResponse<ILoginAPIResponse>) => {
-                this.setState({ loading: false, invalidCreds: false });
+                this.setState({ loading: false, invalidCreds: false, serverDown: false });
                 localStorage.setItem(
                     "loginUser",
                     JSON.stringify(response.data)
@@ -39,7 +38,8 @@ export default class Login extends React.Component<IProps, IState> {
             })
             .catch((err: AxiosError<any>) => {
                 console.log("err", err);
-                this.setState({ invalidCreds: true, loading: false });
+                const isServerDown = !err.response?.status
+                this.setState({ invalidCreds: !isServerDown, serverDown: isServerDown, loading: false });
             });
     };
 
@@ -55,6 +55,9 @@ export default class Login extends React.Component<IProps, IState> {
             >
                 {this.state.invalidCreds && (
                     <h5 style={{ color: "red" }}>Invalid Username/Password</h5>
+                )}
+                {this.state.serverDown && (
+                    <h5 style={{ color: "red" }}>Server Down... Inform Sathish</h5>
                 )}
                 <Form.Item
                     name="username"

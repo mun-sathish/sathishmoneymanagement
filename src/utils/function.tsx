@@ -20,9 +20,9 @@ function fetchUserInfo(hotReload: boolean = false): null | ILoginAPIResponse {
     let parsed: ILoginAPIResponse = JSON.parse(obj);
     if (!parsed) return null;
     if (!parsed.user_id) return null;
-    let queryPararm: string = `?user_name=${parsed.user_name}&password=${parsed.password}`;
+    // let queryPararm: string = `?user_name=${parsed.user_name}&password=${parsed.password}`;
     if (hotReload) {
-        Axios.get(URLS.LOGIN + queryPararm)
+        Axios.post(URLS.LOGIN, parsed)
             .then((response: AxiosResponse<ILoginAPIResponse>) => {
                 localStorage.setItem(
                     "loginUser",
@@ -55,29 +55,23 @@ function postExpense(
         wallet_id: userData.wallet_id,
         created: new Date().getTime(),
         created_by: userData.user_id,
+        created_by_name: userData.user_name,
     };
 
-    let queryParams: string = "?";
-    Object.entries(postData).forEach((values) => {
-        queryParams += `${values[0]}=${values[1]}&`;
-    });
-    queryParams = queryParams.substring(0, queryParams.length - 1);
-    return Axios.get(URLS.POST_TRANSACTION + queryParams);
+    return Axios.post(URLS.POST_TRANSACTION, postData);
 }
 
 function fetchWallet(): Promise<AxiosResponse<IGetWalletResponse>> {
     let userInfo: ILoginAPIResponse | null = fetchUserInfo();
     return !userInfo
         ? Promise.reject("not logged in")
-        : Axios.get(`${URLS.GET_WALLET}?wallet_id=${userInfo.wallet_id}`);
+        : Axios.get(URLS.GET_WALLET(userInfo.wallet_id));
 }
 
 function revertTransaction(
     transaction_id: number
 ): Promise<AxiosResponse<IGetRevertTransactionResponse>> {
-    return Axios.get(
-        `${URLS.REVERT_TRANSACTION}?transaction_id=${transaction_id}`
-    );
+    return Axios.get(URLS.REVERT_TRANSACTION(transaction_id));
 }
 
 function postDeposit(
@@ -86,21 +80,16 @@ function postDeposit(
     let userData: ILoginAPIResponse | null = fetchUserInfo(true);
     if (!userData) return rejectPromise();
     let postData: IPostTransactionRequest = {
-        amount: values.deposit,
+        amount: Number(values.deposit),
         comments: values.comments,
         type: ETransactionType.DEPOSIT,
         wallet_id: userData.wallet_id,
         created: new Date().getTime(),
         created_by: userData.user_id,
         deposited_by: userData.user_id,
+        created_by_name: userData.user_name
     };
-
-    let queryParams: string = "?";
-    Object.entries(postData).forEach((values) => {
-        queryParams += `${values[0]}=${values[1]}&`;
-    });
-    queryParams = queryParams.substring(0, queryParams.length - 1);
-    return Axios.get(URLS.POST_TRANSACTION + queryParams);
+    return Axios.post(URLS.POST_TRANSACTION, postData);
 }
 
 function fetchTransaction(): Promise<AxiosResponse<IGetTransactionResponse[]>> {

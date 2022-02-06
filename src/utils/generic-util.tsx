@@ -39,6 +39,7 @@ export const transformToChart = (
 
   data.forEach((item) => {
     const createdMonth = moment(item.created).format("MMMM YYYY");
+    item.category = item.category || ""; // Added to avoid "null" breakage
 
     if (customData[item.category]) {
       let existingCustomDataCategory: ICustomDataCategory[] =
@@ -82,6 +83,7 @@ export const transformToChart = (
     });
   });
 
+  
   Object.keys(customData).forEach((item) => {
     let datasetArrayData: number[] = [];
     customData[item].forEach((customItem) => {
@@ -102,8 +104,8 @@ export const transformToChart = (
     datasets.push(dataset);
   });
 
-  console.log("labels", JSON.stringify(labels));
-  console.log("datasets", JSON.stringify(datasets));
+  // console.log("labels", JSON.stringify(labels));
+  // console.log("datasets", JSON.stringify(datasets));
 
   return {
     labels,

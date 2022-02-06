@@ -183,13 +183,14 @@ const AMOUNT: IAmount[] = [
   { name: "-50", color: mdColors[generateRandomNumber(0, 122)] },
 ];
 
-const BASE_URI = "https://spendable-length.000webhostapp.com";
+// const BASE_URI = "https://spendable-length.000webhostapp.com";
+const BASE_URI = "https://sathish-home-money-management.herokuapp.com/wallet/v0";
 const URLS = {
-  LOGIN: BASE_URI + "/login.php",
-  GET_WALLET: BASE_URI + "/getWallet.php",
-  POST_TRANSACTION: BASE_URI + "/postTransaction.php",
-  GET_TRANSACTION: BASE_URI + "/getTransaction.php",
-  REVERT_TRANSACTION: BASE_URI + "/revertTransaction.php",
+  LOGIN: BASE_URI + "/login",
+  GET_WALLET: (walletId: number) => `${BASE_URI}/wallet/${walletId}`,
+  POST_TRANSACTION: BASE_URI + "/transactions",
+  GET_TRANSACTION: BASE_URI + "/transactions",
+  REVERT_TRANSACTION: (transactionId: number) => `${BASE_URI}/transactions/${transactionId}/revert`,
 };
 
 enum LOCATION {

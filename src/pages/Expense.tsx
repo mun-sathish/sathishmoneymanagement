@@ -46,7 +46,6 @@ export default class Expense extends React.Component<IProps, IState> {
     fetchWallet = (): void => {
         fetchWallet()
             .then((response: AxiosResponse<IGetWalletResponse>) => {
-                console.log(response.data);
                 this.setState({ walletLoading: false, wallet: response.data });
             })
             .catch((err: AxiosError<any>) => {
@@ -65,7 +64,7 @@ export default class Expense extends React.Component<IProps, IState> {
             })
             .catch((err: AxiosError<any>) => {
                 console.log("err: While posting transaction data", err);
-                alert("Transaction failed");
+                alert(err.response?.data?.message || "Transaction failed");
                 this.setState({ postingData: false });
             });
     };
