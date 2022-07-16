@@ -275,7 +275,7 @@ export default class Transaction extends React.Component<IProps, IState> {
           return category ? (
             <Tag color={category.color}>{category.name}</Tag>
           ) : (
-            <div>{text?.name}</div>
+            <Tag color="default" >{text}</Tag>
           );
         },
       },
