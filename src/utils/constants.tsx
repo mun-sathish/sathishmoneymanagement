@@ -154,15 +154,12 @@ const CATEGORIES: ICategories[] = [
   { name: "PROVISION", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "MEDICINE", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "SNACKS", color: mdColors[generateRandomNumber(0, 122)] },
-  { name: "AMWAY", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "MOBILE-RECHARGE", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "INTERNET", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "RESTAURANT", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "ELECTRONIC", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "PETROL", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "TRAVEL", color: mdColors[generateRandomNumber(0, 122)] },
-  { name: "GAS", color: mdColors[generateRandomNumber(0, 122)] },
-  { name: "D-MART", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "CLOTHES", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "PROFESSIONAL", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "MISCELLANEOUS", color: mdColors[generateRandomNumber(0, 122)] },
@@ -170,6 +167,7 @@ const CATEGORIES: ICategories[] = [
   { name: "HOUSE-SHIFTING", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "HOUSE-RENT", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "ELECTRICITY", color: mdColors[generateRandomNumber(0, 122)] },
+  { name: "ENTERTAINMENT", color: mdColors[generateRandomNumber(0, 122)] },
 ];
 
 const AMOUNT: IAmount[] = [
