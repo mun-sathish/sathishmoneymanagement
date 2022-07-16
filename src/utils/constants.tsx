@@ -168,6 +168,7 @@ const CATEGORIES: ICategories[] = [
   { name: "HOUSE-RENT", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "ELECTRICITY", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "ENTERTAINMENT", color: mdColors[generateRandomNumber(0, 122)] },
+  { name: "SERVANT", color: mdColors[generateRandomNumber(0, 122)] },
 ];
 
 const AMOUNT: IAmount[] = [
