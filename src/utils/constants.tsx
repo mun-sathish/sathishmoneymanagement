@@ -162,12 +162,13 @@ const CATEGORIES: ICategories[] = [
   { name: "TRAVEL", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "SHOPPING", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "PROFESSIONAL", color: mdColors[generateRandomNumber(0, 122)] },
-  { name: "MISCELLANEOUS", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "SHORTAGE", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "HOUSE-RENT", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "ELECTRICITY", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "ENTERTAINMENT", color: mdColors[generateRandomNumber(0, 122)] },
   { name: "SERVANT", color: mdColors[generateRandomNumber(0, 122)] },
+  { name: "GAS", color: mdColors[generateRandomNumber(0, 122)] },
+  { name: "MISCELLANEOUS", color: mdColors[generateRandomNumber(0, 122)] },
 ];
 
 const AMOUNT: IAmount[] = [
