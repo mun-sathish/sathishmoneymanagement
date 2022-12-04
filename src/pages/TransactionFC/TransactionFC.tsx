@@ -1,24 +1,24 @@
 import { DeleteTwoTone, EuroTwoTone, FireTwoTone } from "@ant-design/icons";
-import { Button, Collapse, Empty, Popconfirm, Table, Tag, Row, Col, Input } from "antd";
+import { Col, Collapse, Input, Popconfirm, Row, Table, Tag } from "antd";
 import CollapsePanel from "antd/lib/collapse/CollapsePanel";
 import { ColumnsType, TablePaginationConfig, TableProps } from "antd/lib/table";
 import {
-    ExpandableConfig,
+  ExpandableConfig
 } from "antd/lib/table/interface";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import CustomDatePickerComponent from "../../components/CustomDatePickerComponent";
 import TransactionLineChart from "../../components/TransactionLineChart";
 import { ETransactionType, EUserRole } from "../../types/enums/generic";
 import {
-    IGetTransactionResponse,
-    ILoginAPIResponse
+  IGetTransactionResponse,
+  ILoginAPIResponse
 } from "../../types/interfaces/api-response";
 import * as Constants from "../../utils/constants";
 import {
-    fetchUserInfo,
-    revertTransaction
+  fetchUserInfo,
+  revertTransaction
 } from "../../utils/function";
 import { transformToChart } from "../../utils/generic-util";
 import { IState } from "./interfaces";
@@ -29,20 +29,11 @@ const { Search } = Input;
 
 export interface IProps extends RouteComponentProps {}
 
-const expandable: ExpandableConfig<IGetTransactionResponse> = {
-    expandedRowRender: (record) => (
-        <p>
-        {record.comments && record.comments !== "undefined"
-            ? <pre>{record.comments}</pre>
-            : "No Comments Provided"}
-        </p>
-    ),
-};
-
 const pagination: false | TablePaginationConfig = { position: ["bottomRight"] };
 
 const TransactionFC: React.FC<IProps> = () => {
     const [searchQuery, setsearchQuery] = useState("");
+    
     const [state, setState] = useState<IState>({
         currentTableViewTotalAmt: 0,
         windowWidth: Number.MAX_VALUE,
@@ -56,20 +47,36 @@ const TransactionFC: React.FC<IProps> = () => {
           // yScroll: true, // make false lesser width, else true
           pagination,
           size: "middle",
-          expandable,
           hasData: true,
           bottom: "bottomRight",
         },
     });
 
+    const expandable: ExpandableConfig<IGetTransactionResponse> = useMemo(() => ({
+      expandedRowRender: (record) => (
+          <p>
+          {state.windowWidth <= 480 && (
+            <>
+              <div>{renderRecordType(record.type)} created by <b>{record.created_by_name}</b></div>
+            </>
+          )}
+          {record.comments && record.comments !== "undefined"
+              ? <pre style={{whiteSpace: 'pre-wrap', wordBreak: 'keep-all'}}>{record.comments}</pre>
+              : "No Comments Provided"}
+
+              
+          </p>
+      ),
+    }), [state.windowWidth]);
+
     /**
      * Setting Footer of table props
      */
     useEffect(() => {
-      setState((prevData) => ({...prevData, tableProps: {...prevData.tableProps, footer: () => (
+      setState((prevData) => ({...prevData, tableProps: {...prevData.tableProps, expandable, footer: () => (
         <h4>Total amt is: {state.currentTableViewTotalAmt}</h4>
       )}}))
-    }, [state.currentTableViewTotalAmt]);
+    }, [expandable, state.currentTableViewTotalAmt]);
 
     /**
      * Search Query
@@ -126,10 +133,23 @@ const TransactionFC: React.FC<IProps> = () => {
       return <div></div>;
     }
 
+    const renderRecordType = (type: string) => {
+      let viewText = <div />;
+      if (type === "W")
+        viewText = (
+          <FireTwoTone style={{ fontSize: 25 }} twoToneColor="red" />
+        );
+      if (type === "D")
+        viewText = (
+          <EuroTwoTone style={{ fontSize: 25 }} twoToneColor="#52c41a" />
+        );
+      return viewText;
+    }
     const columns: ColumnsType<IGetTransactionResponse> = [
       {
         title: "Type",
         dataIndex: "type",
+        responsive: ["sm"],
         filters: [
           {
             text: <FireTwoTone style={{ fontSize: 20 }} twoToneColor="red" />,
@@ -145,16 +165,7 @@ const TransactionFC: React.FC<IProps> = () => {
         onFilter: (value, record) =>
           record.type.indexOf(value as ETransactionType) === 0,
         render: (text, record, index) => {
-          let viewText = <div />;
-          if (text === "W")
-            viewText = (
-              <FireTwoTone style={{ fontSize: 25 }} twoToneColor="red" />
-            );
-          if (text === "D")
-            viewText = (
-              <EuroTwoTone style={{ fontSize: 25 }} twoToneColor="#52c41a" />
-            );
-          return viewText;
+          return renderRecordType(text);
         },
         sorter: (a, b) => a.type.localeCompare(b.type),
       },
@@ -205,6 +216,7 @@ const TransactionFC: React.FC<IProps> = () => {
       {
         title: "Owner",
         dataIndex: "created_by_name",
+        responsive: ["sm"],
         render: (text, record, index) => {
           return <div>{text}</div>;
         },
@@ -258,6 +270,7 @@ const TransactionFC: React.FC<IProps> = () => {
       {
         title: "",
         key: "action",
+        responsive:["sm"],
         render: (text, record) => (
           <Popconfirm
             title="Are you sure?"
@@ -296,61 +309,101 @@ const TransactionFC: React.FC<IProps> = () => {
       })
     );
     
-
     return (
-        <div>
-          {state.windowWidth <= 480 ? (
-            <Empty
-              image={
-                "https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-              }
-              imageStyle={{
-                height: 60,
-              }}
-              description={<span>Potrait Screen is not supportted</span>}
-            >
-              <Button type="primary">Rotate Now</Button>
-            </Empty>
-          ) : (
-            <>
-              <Collapse bordered={false} defaultActiveKey={["1"]}>
-                <CollapsePanel header="Table" key="1">
-                  <div onMouseDown={(e) => e.preventDefault()}>
-                    <Table
-                      {...state.tableProps}
-                      pagination={{
-                        position: [state.tableProps.bottom],
-                        pageSize: 10,
-                      }}
-                      columns={tableColumns}
-                      dataSource={tableProps.hasData ? state.tableData : []}
-                      scroll={scroll}
-                      onChange={onChange}
-                      title={() => 
-                      <Row>
-                        <Col xl={{span: 6, offset: 18}} md={{span: 12, offset: 12}}>
-                        <Search
-                            placeholder="Search"
-                            allowClear
-                            enterButton="Search"
-                            size="middle"
-                            onSearch={onChangeInputSearch}
-                          />
-                        </Col>
-                      </Row>}
-                    />
-                  </div>
-                </CollapsePanel>
-                <CollapsePanel header="Line Chart" key="2">
-                  <TransactionLineChart
-                    data={transformToChart(state.currentViewTableData)}
+      <div>
+          <>
+            <Collapse bordered={false} defaultActiveKey={["1"]}>
+              <CollapsePanel header="Table" key="1">
+                <div onMouseDown={(e) => e.preventDefault()}>
+                  <Table
+                    {...state.tableProps}
+                    pagination={{
+                      position: [state.tableProps.bottom],
+                      pageSize: 10,
+                    }}
+                    columns={tableColumns}
+                    dataSource={tableProps.hasData ? state.tableData : []}
+                    scroll={scroll}
+                    onChange={onChange}
+                    title={() => 
+                    <Row>
+                      <Col xl={{span: 6, offset: 18}} md={{span: 12, offset: 12}} xs={{span: 24}}>
+                      <Search
+                          placeholder="Search"
+                          allowClear
+                          enterButton="Search"
+                          size="middle"
+                          onSearch={onChangeInputSearch}
+                        />
+                      </Col>
+                    </Row>}
                   />
-                </CollapsePanel>
-              </Collapse>
-            </>
-          )}
-        </div>
-      );
+                </div>
+              </CollapsePanel>
+              <CollapsePanel header="Line Chart" key="2">
+                <TransactionLineChart
+                  data={transformToChart(state.currentViewTableData)}
+                />
+              </CollapsePanel>
+            </Collapse>
+          </>
+      </div>
+    );
+
+    // return (
+    //     <div>
+    //       {state.windowWidth <= 480 ? (
+    //         <Empty
+    //           image={
+    //             "https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+    //           }
+    //           imageStyle={{
+    //             height: 60,
+    //           }}
+    //           description={<span>Potrait Screen is not supportted</span>}
+    //         >
+    //           <Button type="primary">Rotate Now</Button>
+    //         </Empty>
+    //       ) : (
+    //         <>
+    //           <Collapse bordered={false} defaultActiveKey={["1"]}>
+    //             <CollapsePanel header="Table" key="1">
+    //               <div onMouseDown={(e) => e.preventDefault()}>
+    //                 <Table
+    //                   {...state.tableProps}
+    //                   pagination={{
+    //                     position: [state.tableProps.bottom],
+    //                     pageSize: 10,
+    //                   }}
+    //                   columns={tableColumns}
+    //                   dataSource={tableProps.hasData ? state.tableData : []}
+    //                   scroll={scroll}
+    //                   onChange={onChange}
+    //                   title={() => 
+    //                   <Row>
+    //                     <Col xl={{span: 6, offset: 18}} md={{span: 12, offset: 12}}>
+    //                     <Search
+    //                         placeholder="Search"
+    //                         allowClear
+    //                         enterButton="Search"
+    //                         size="middle"
+    //                         onSearch={onChangeInputSearch}
+    //                       />
+    //                     </Col>
+    //                   </Row>}
+    //                 />
+    //               </div>
+    //             </CollapsePanel>
+    //             <CollapsePanel header="Line Chart" key="2">
+    //               <TransactionLineChart
+    //                 data={transformToChart(state.currentViewTableData)}
+    //               />
+    //             </CollapsePanel>
+    //           </Collapse>
+    //         </>
+    //       )}
+    //     </div>
+    //   );
 }
 
 export default TransactionFC;

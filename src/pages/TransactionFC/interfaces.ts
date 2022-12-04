@@ -25,7 +25,7 @@ export interface IState {
       yScroll?: boolean;
       pagination: false | TablePaginationConfig;
       size: SizeType;
-      expandable: ExpandableConfig<IGetTransactionResponse>;
+      expandable?: ExpandableConfig<IGetTransactionResponse>;
       hasData: boolean;
       bottom: "bottomRight";
     };
