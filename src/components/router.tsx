@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import Deposit from "../pages/Deposit";
-import Transaction from "../pages/Transaction";
+import { TransactionFC } from "../pages/TransactionFC";
 import Expense from "../pages/Expense";
 import Login from "../pages/Login";
 import { LOCATION } from "../utils/constants";
@@ -65,7 +65,7 @@ const AppRouter: React.FC<IAppRouterProps> = (props) => {
     return (
         <Switch>
             <Route exact path={LOCATION.EXPENSE} component={Expense} />
-            <Route path={LOCATION.TRANSACTION} component={Transaction} />
+            <Route path={LOCATION.TRANSACTION} component={TransactionFC} />
             <Route path={LOCATION.DEPOSIT} component={Deposit} />
             <Route
                 path={LOCATION.LOGIN}

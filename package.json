@@ -10,12 +10,13 @@
     "antd": "^4.2.5",
     "axios": "^0.19.2",
     "chart.js": "^2.9.4",
+    "lodash.debounce": "^4.0.8",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.11.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "typescript": "^3.9.3"
+    "typescript": "^4.9.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -40,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.7",
     "@types/react-router-dom": "^5.1.5",
     "netlify-cli": "^2.53.0"
   }

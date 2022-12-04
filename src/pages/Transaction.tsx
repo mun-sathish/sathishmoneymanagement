@@ -37,6 +37,8 @@ type IDataSet = {
   borderColor: string;
 };
 
+
+
 interface IState {
   currentTableViewTotalAmt: number;
   dateFilterDropdownVisible: boolean;
@@ -373,7 +375,7 @@ export default class Transaction extends React.Component<IProps, IState> {
                     columns={tableColumns}
                     dataSource={tableProps.hasData ? this.state.tableData : []}
                     scroll={scroll}
-                    onChange={this.onChange}
+                    // onChange={this.onChange}
                   />
                 </div>
               </CollapsePanel>
