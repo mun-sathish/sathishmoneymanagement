@@ -44,7 +44,7 @@ const pagination: false | TablePaginationConfig = { position: ["bottomRight"] };
 const TransactionFC: React.FC<IProps> = () => {
     const [searchQuery, setsearchQuery] = useState("");
     const [state, setState] = useState<IState>({
-        currentTableViewTotalAmt: 9,
+        currentTableViewTotalAmt: 0,
         windowWidth: Number.MAX_VALUE,
         dateFilterDropdownVisible: false,
         currentViewTableData: [], // will be set on change of table content as TableData will not get updated based on table filters
@@ -328,7 +328,7 @@ const TransactionFC: React.FC<IProps> = () => {
                       onChange={onChange}
                       title={() => 
                       <Row>
-                        <Col span={6} offset={18}>
+                        <Col xl={{span: 6, offset: 18}} md={{span: 12, offset: 12}}>
                         <Search
                             placeholder="Search"
                             allowClear
